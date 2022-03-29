@@ -16,6 +16,8 @@ function Dashboard() {
     return state.account.balances && state.account.balances.ucc;
   });
 
+  // Market price and market cap values are placeholders for now
+
   return (
     <div className="dashboard-view">
       <div className="dashboard-infos-wrap">
