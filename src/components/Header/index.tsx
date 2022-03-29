@@ -52,8 +52,8 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
         <Toolbar disableGutters className="dapp-topbar">
           <div onClick={handleDrawerToggle} className="dapp-topbar-slider-btn">
             <div style={{ display: "flex", alignItems: "center" }}>
-              <img alt="" src={MenuIcon} style={{ width: "40px", height: "40px" }} />
-              <Typography variant="subtitle1" color="primary" style={{ color: "#ffa74f", fontSize: "24px", fontWeight: "bold", marginLeft: "8px", textDecoration: "none" }}>
+              <img alt="" src={MenuIcon} style={{ width: "30px", height: "30px" }} />
+              <Typography variant="subtitle1" color="primary" style={{ color: "#ffa74f", fontSize: "18px", fontWeight: "bold", marginLeft: "5px", textDecoration: "none" }}>
                 UniversalCoffeeDAO
               </Typography>
             </div>{" "}
