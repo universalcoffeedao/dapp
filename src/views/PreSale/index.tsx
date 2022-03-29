@@ -91,6 +91,7 @@ function PreSale() {
   const trimmedSalesProceedDaiBalance = trim(Number(salesProceedDaiBalance) / Math.pow(10, 9), 3);
   const formattedUCCPrice = new Intl.NumberFormat("en-US").format(Number(uccPrice) / Math.pow(10, 9));
   const numUCCSold = Number(trimmedSalesProceedDaiBalance) / Number(formattedUCCPrice);
+
   return (
     <div className="stake-view">
       <Zoom in={true}>
@@ -101,7 +102,7 @@ function PreSale() {
                 <p className="stake-card-header-title">UCC PreSale (☕, ☕)</p>
               </div>
               <div className="stake-card-header">
-                <p className="stake-card-header-subtitle">{numUCCSold} / 10000 Sold!</p>
+                {numUCCSold > 0 ? <p className="stake-card-header-subtitle"> {numUCCSold} / 10000 Sold!</p> : <p className="stake-card-header-subtitle">Limited Supply</p>}
               </div>
             </Grid>
 
