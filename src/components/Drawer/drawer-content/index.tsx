@@ -131,7 +131,7 @@ function NavContent() {
             ))}
           </div> */}
 
-          <Link
+          {/* <Link
             component={NavLink}
             to="/pre-sale"
             isActive={(match: any, location: any) => {
@@ -144,7 +144,7 @@ function NavContent() {
               <img alt="" src={StakeIcon} />
               <p>PreSale</p>
             </div>
-          </Link>
+          </Link> */}
           <Link
             href="https://quickswap.exchange/#/swap?inputCurrency=&outputCurrency=0x35C3c8096CDe3c13a565b68d17b9Bf1f9836B9eB"
             target="_blank"

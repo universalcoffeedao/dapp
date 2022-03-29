@@ -51,7 +51,7 @@ export const daiCalm = new LPBond({
   networkAddrs: {
     [Networks.POLYGON]: {
       bondAddress: "0x722f094abC5D5e1FF04808CfEDd8dC87df4eA7bc",
-      reserveAddress: "0x339bd5E0081A251F972d1eBEF966A0f60AFD995e",
+      reserveAddress: "0xc3C2D067dc235f5583013F694c86226343092911",
     },
   },
   lpUrl: "https://www.traderjoexyz.com/#/pool/0x130966628846BFd36ff31a822705796e8cb8C18D/0xb54f16fB19478766A268F172C9480f8da1a7c9C3",

@@ -48,7 +48,7 @@ export const loadAppDetails = createAsyncThunk(
 
     const marketPrice = ((await getMarketPrice(networkID, provider)) / Math.pow(10, 9)) * daiPrice;
 
-    const totalSupply = (await calmContract.totalSupply()) / Math.pow(10, 9);
+    const totalSupply = (await uccContract.totalSupply()) / Math.pow(10, 9);
 
     const circSupply = (await sCalmContract.circulatingSupply()) / Math.pow(10, 9);
 
