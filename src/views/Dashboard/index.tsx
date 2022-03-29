@@ -16,8 +16,6 @@ function Dashboard() {
     return state.account.balances && state.account.balances.ucc;
   });
 
-  // Market price and market cap values are placeholders for now
-
   return (
     <div className="dashboard-view">
       <div className="dashboard-infos-wrap">
@@ -26,15 +24,14 @@ function Dashboard() {
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <div className="dashboard-card">
                 <p className="card-title">UCC Market Price</p>
-                {/* <p className="card-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(app.marketPrice, 2)}`}</p> */}
-                <p className="card-value">{isAppLoading ? <Skeleton width="100px" /> : `$0.08`}</p>
+                <p className="card-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(app.marketPrice, 4)}`}</p>
               </div>
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <div className="dashboard-card">
                 <p className="card-title">Market Cap</p>
-                {/* <p className="card-value">
+                <p className="card-value">
                   {isAppLoading ? (
                     <Skeleton width="160px" />
                   ) : (
@@ -45,8 +42,7 @@ function Dashboard() {
                       minimumFractionDigits: 0,
                     }).format(app.marketCap)
                   )}
-                </p> */}
-                <p className="card-value">{isAppLoading ? <Skeleton width="160px" /> : `$1,325,439`}</p>
+                </p>
               </div>
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>
