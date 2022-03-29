@@ -21,7 +21,7 @@ function ConnectMenu() {
   let buttonStyle = {};
 
   if (isConnected) {
-    buttonText = "Disconnect";
+    buttonText = "Disconnect Wallet";
     clickFunc = disconnect;
   }
 
