@@ -119,14 +119,14 @@ function FlatSale() {
                     </div>
                   </Grid>
 
-                  <Grid item xs={6} sm={4} md={4} lg={4}>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-card-tvl">
                       <p className="stake-card-metrics-title">Your DAI Balance</p>
                       <p className="stake-card-metrics-value">{trimmedsDaiBalance}</p>
                     </div>
                   </Grid>
 
-                  <Grid item xs={6} sm={4} md={4} lg={4}>
+                  <Grid item xs={12} sm={4} md={4} lg={4}>
                     <div className="stake-card-index">
                       <p className="stake-card-metrics-title">Max You Can Buy</p>
                       <p className="stake-card-metrics-value">{uccPurchaseLimit ? <>{trim(Number(uccPurchaseLimit) - 1, 2)} UCCs</> : <Skeleton width="150px" />}</p>
