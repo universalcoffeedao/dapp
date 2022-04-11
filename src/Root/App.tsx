@@ -12,7 +12,7 @@ import ViewBase from "../components/ViewBase";
 import { Stake, ChooseBond, Bond, Dashboard, NotFound, Calculator } from "../views";
 import "./style.scss";
 import useTokens from "../hooks/tokens";
-import PreSale from "src/views/PreSale";
+import FlatSale from "src/views/FlatSale";
 
 function App() {
   const dispatch = useDispatch();
@@ -131,8 +131,8 @@ function App() {
           <ChooseBond />
         </Route>
 
-        <Route path="/pre-sale">
-          <PreSale />
+        <Route path="/flat-sale">
+          <FlatSale />
         </Route>
 
         <Route path="/calculator">

@@ -11,6 +11,8 @@ import React from "react";
 import { RootState } from "../store";
 import { IToken } from "../../helpers/tokens";
 
+import { POLYGON_MAINNET } from "../../constants/addresses";
+
 interface IGetBalances {
   address: string;
   networkID: Networks;
@@ -66,6 +68,7 @@ interface IUserAccountDetails {
     dai: string;
     pcalm: string;
     ucc: string;
+    salesContractUcc: string;
     salesProceedDai: string;
   };
   staking: {
@@ -100,6 +103,7 @@ export const loadAccountDetails = createAsyncThunk("account/loadAccountDetails",
   let uccDaiAllowance = 0;
   let uccBalance = 0;
   let salesProceedDaiBalance = 0;
+  let salesContractUccBalance = 0;
 
   const addresses = getAddresses(networkID);
 
@@ -144,6 +148,7 @@ export const loadAccountDetails = createAsyncThunk("account/loadAccountDetails",
     uccDaiAllowance = await daiContract2.allowance(address, addresses.UCC_SALES_ADDRESS);
     const uccContract = new ethers.Contract(addresses.UCC_ADDRESS, UCCTokenContract, provider);
 
+    salesContractUccBalance = await uccContract.balanceOf(POLYGON_MAINNET.UCC_SALES_ADDRESS);
     uccBalance = await uccContract.balanceOf(address);
   }
 
@@ -155,6 +160,7 @@ export const loadAccountDetails = createAsyncThunk("account/loadAccountDetails",
       dai: ethers.utils.formatUnits(daiBalance, "gwei"),
       pcalm: ethers.utils.formatUnits(pcalmBalance, "ether"),
       ucc: ethers.utils.formatUnits(uccBalance, "gwei"),
+      salesContractUcc: ethers.utils.formatUnits(salesContractUccBalance, "gwei"),
       salesProceedDai: ethers.utils.formatUnits(salesProceedDaiBalance, "gwei"),
     },
     staking: {
@@ -310,6 +316,7 @@ export interface IAccountSlice {
     dai: string;
     pcalm: string;
     ucc: string;
+    salesContractUcc: string;
     salesProceedDai: string;
   };
   loading: boolean;
@@ -332,7 +339,7 @@ export interface IAccountSlice {
 const initialState: IAccountSlice = {
   loading: true,
   bonds: {},
-  balances: { scalm: "", calm: "", wscalm: "", dai: "", pcalm: "", ucc: "", salesProceedDai: "" },
+  balances: { scalm: "", calm: "", wscalm: "", dai: "", pcalm: "", ucc: "", salesContractUcc: "", salesProceedDai: "" },
   staking: { calm: 0, scalm: 0 },
   wrapping: { scalm: 0 },
   tokens: {},

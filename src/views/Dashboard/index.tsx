@@ -21,14 +21,14 @@ function Dashboard() {
       <div className="dashboard-infos-wrap">
         <Zoom in={true}>
           <Grid container spacing={4}>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Grid item lg={6} md={6} sm={6} xs={12}>
               <div className="dashboard-card">
                 <p className="card-title">UCC Market Price</p>
-                <p className="card-value">{isAppLoading ? <Skeleton width="100px" /> : `$${trim(app.marketPrice, 4)}`}</p>
+                <p className="card-value">{isAppLoading ? <Skeleton width="100px" /> : `$${app.marketPrice.toFixed(4)}`}</p>
               </div>
             </Grid>
 
-            <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Grid item lg={6} md={6} sm={6} xs={12}>
               <div className="dashboard-card">
                 <p className="card-title">Market Cap</p>
                 <p className="card-value">
@@ -45,10 +45,16 @@ function Dashboard() {
                 </p>
               </div>
             </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Grid item lg={6} md={6} sm={6} xs={12}>
+              <div className="dashboard-card">
+                <p className="card-title">Circulating Supply</p>
+                <p className="card-value">{isAppLoading ? <Skeleton width="160px" /> : app.circSupply.toLocaleString()} UCCs</p>
+              </div>
+            </Grid>
+            <Grid item lg={6} md={6} sm={6} xs={12}>
               <div className="dashboard-card">
                 <p className="card-title">Your UCC Balance</p>
-                <p className="card-value">{isAppLoading ? <Skeleton width="160px" /> : trim(Number(yourUCCBalance), 4)} UCC</p>
+                <p className="card-value">{isAppLoading ? <Skeleton width="160px" /> : trim(Number(yourUCCBalance), 1)} UCC</p>
               </div>
             </Grid>
 

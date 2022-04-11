@@ -13,11 +13,14 @@ export default function Social() {
       <Link href="https://github.com/universalcoffeedao" target="_blank">
         <GitHubIcon style={{ color: "#000000", fontSize: "30px" }} />{" "}
       </Link>
-      <Link href="https://twitter.com/coffee_unversal" target="_blank">
+      <Link href="https://twitter.com/coffeedao_eth" target="_blank">
         <TwitterIcon style={{ color: "#000000", fontSize: "30px" }} />{" "}
       </Link>
       <Link href="https://discord.gg/7D22JUbqPW" target="_blank">
-        <img src={DiscordIcon} alt="" style={{ marginTop: "3px", width: "40px", height: "25px" }} />{" "}
+        <FaDiscord style={{ marginTop: "3px", width: "40px", height: "25px", color: "#000000" }} />{" "}
+      </Link>
+      <Link href="https://medium.com/@universalcoffeecoin/introducing-universalcoffeedao-ea64c87be613" target="_blank">
+        <FaMedium style={{ marginTop: "3px", width: "40px", height: "25px", color: "#000000" }} />
       </Link>
     </div>
   );

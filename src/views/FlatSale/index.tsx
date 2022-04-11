@@ -13,7 +13,7 @@ import { messages } from "../../constants/messages";
 import classnames from "classnames";
 import { warning } from "../../store/slices/messages-slice";
 
-function PreSale() {
+function FlatSale() {
   const dispatch = useDispatch();
   const { provider, address, connect, chainID, checkWrongNetwork } = useWeb3Context();
 
@@ -22,19 +22,16 @@ function PreSale() {
 
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
 
-  const calmBalance = useSelector<IReduxState, string>(state => {
-    return state.account.balances && state.account.balances.calm;
-  });
-  const scalmBalance = useSelector<IReduxState, string>(state => {
-    return state.account.balances && state.account.balances.scalm;
-  });
-
   const yourDaiBalance = useSelector<IReduxState, string>(state => {
     return state.account.balances && state.account.balances.dai;
   });
 
   const salesProceedDaiBalance = useSelector<IReduxState, string>(state => {
     return state.account.balances && state.account.balances.salesProceedDai;
+  });
+
+  const salesContractUccBalance = useSelector<IReduxState, string>(state => {
+    return state.account.balances && state.account.balances.salesContractUcc;
   });
 
   const pendingTransactions = useSelector<IReduxState, IPendingTxn[]>(state => {
@@ -86,12 +83,14 @@ function PreSale() {
     setQuantity("");
   };
 
-  const trimmedsDaiBalance = trim(Number(yourDaiBalance) / Math.pow(10, 9), 2);
+  const trimmedsDaiBalance = trim(Number(yourDaiBalance) / Math.pow(10, 9), 4);
 
   const trimmedSalesProceedDaiBalance = trim(Number(salesProceedDaiBalance) / Math.pow(10, 9), 3);
   const formattedUCCPrice = new Intl.NumberFormat("en-US").format(Number(uccPrice) / Math.pow(10, 9));
-  const numUCCSold = Number(trimmedSalesProceedDaiBalance) / Number(formattedUCCPrice);
+  const numUCCSold = 10000000 - Number(salesContractUccBalance);
+  console.log("numUCCSold", numUCCSold);
 
+  // 770,536 is a circulating supply before flat sale
   return (
     <div className="stake-view">
       <Zoom in={true}>
@@ -99,10 +98,14 @@ function PreSale() {
           <Grid className="stake-card-grid" container direction="column" spacing={2}>
             <Grid item>
               <div className="stake-card-header">
-                <p className="stake-card-header-title">UCC PreSale (☕, ☕)</p>
+                <p className="stake-card-header-title">UCC Sale (☕, ☕)</p>
               </div>
               <div className="stake-card-header">
-                {numUCCSold > 0 ? <p className="stake-card-header-subtitle"> {numUCCSold} / 10000 Sold!</p> : <p className="stake-card-header-subtitle">Limited Supply</p>}
+                {address ? (
+                  <p className="stake-card-header-subtitle"> {(770536 + numUCCSold).toLocaleString()} / 2,000,000 Sold!</p>
+                ) : (
+                  <p className="stake-card-header-subtitle">Limited Supply</p>
+                )}
               </div>
             </Grid>
 
@@ -134,15 +137,13 @@ function PreSale() {
             </Grid>
 
             <div className="stake-card-area">
-              {!address && (
+              {numUCCSold !== 10000000 && 770536 + numUCCSold > 2000000 ? (
                 <div className="stake-card-wallet-notification">
-                  <div className="stake-card-wallet-connect-btn" onClick={connect}>
-                    <p>Connect Wallet</p>
+                  <div className="stake-card-wallet-connect-btn">
+                    <p>SOLD OUT</p>
                   </div>
-                  <p className="stake-card-wallet-desc-text">Connect your wallet to stake CALM tokens!</p>
                 </div>
-              )}
-              {address && (
+              ) : address ? (
                 <div>
                   <div className="stake-card-action-area">
                     <div className="stake-card-action-stage-btns-wrap">
@@ -150,8 +151,8 @@ function PreSale() {
                         <p>Buy UCC</p>
                       </div>
                       {/* <div onClick={changeView(1)} className={classnames("stake-card-action-stage-btn", { active: view })}>
-                                                <p>Unstake</p>
-                                            </div> */}
+																						<p>Unstake</p>
+																				</div> */}
                     </div>
 
                     <div className="stake-card-action-row">
@@ -203,25 +204,32 @@ function PreSale() {
                     </div>
 
                     {/* <div className="data-row">
-                      <p className="data-row-name">Your Staked Balance</p>
-                      <p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{trimmedsCalmBalance} SCALM</>}</p>
-                    </div>
+									<p className="data-row-name">Your Staked Balance</p>
+									<p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{trimmedsCalmBalance} SCALM</>}</p>
+								</div>
 
-                    <div className="data-row">
-                      <p className="data-row-name">Next Reward Amount</p>
-                      <p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} SCALM</>}</p>
-                    </div>
+								<div className="data-row">
+									<p className="data-row-name">Next Reward Amount</p>
+									<p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} SCALM</>}</p>
+								</div>
 
-                    <div className="data-row">
-                      <p className="data-row-name">Next Reward Yield</p>
-                      <p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{stakingRebasePercentage}%</>}</p>
-                    </div>
+								<div className="data-row">
+									<p className="data-row-name">Next Reward Yield</p>
+									<p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{stakingRebasePercentage}%</>}</p>
+								</div>
 
-                    <div className="data-row">
-                      <p className="data-row-name">ROI (5-Day Rate)</p>
-                      <p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(fiveDayRate) * 100, 4)}%</>}</p>
-                    </div> */}
+								<div className="data-row">
+									<p className="data-row-name">ROI (5-Day Rate)</p>
+									<p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(fiveDayRate) * 100, 4)}%</>}</p>
+								</div> */}
                   </div>
+                </div>
+              ) : (
+                <div className="stake-card-wallet-notification">
+                  <div className="stake-card-wallet-connect-btn" onClick={connect}>
+                    <p>Connect Wallet</p>
+                  </div>
+                  <p className="stake-card-wallet-desc-text">Connect your wallet to buy UCC!</p>
                 </div>
               )}
             </div>
@@ -232,4 +240,4 @@ function PreSale() {
   );
 }
 
-export default PreSale;
+export default FlatSale;

@@ -4,8 +4,8 @@ import { ethers } from "ethers";
 import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
 import { JsonRpcProvider, StaticJsonRpcProvider } from "@ethersproject/providers";
 
-import { StakingContract, sCalmTokenContract, CalmTokenContract, pCalmTokenContract, pCalmTokenSalesContract, UCCTokenContract, preUCCTokenSalesContract } from "../../calmAbi";
-import { getAddresses } from "../../constants";
+import { StakingContract, sCalmTokenContract, CalmTokenContract, pCalmTokenContract, pCalmTokenSalesContract, UCCTokenContract, flatUCCTokenSalesContract } from "../../calmAbi";
+import { getAddresses, POLYGON_MAINNET } from "../../constants";
 import { Networks } from "../../constants/blockchain";
 import { messages } from "../../constants/messages";
 import { getMarketPrice, getTokenPrice, setAll, sleep } from "../../helpers";
@@ -44,16 +44,20 @@ export const loadAppDetails = createAsyncThunk(
     const pCalmSalesContract = new ethers.Contract(addresses.PCALM_SALES_ADDRESS, pCalmTokenSalesContract, provider);
 
     const uccContract = new ethers.Contract(addresses.UCC_ADDRESS, UCCTokenContract, provider);
-    const uccSalesContract = new ethers.Contract(addresses.UCC_SALES_ADDRESS, preUCCTokenSalesContract, provider);
+    const uccSalesContract = new ethers.Contract(addresses.UCC_SALES_ADDRESS, flatUCCTokenSalesContract, provider);
 
-    const marketPrice = ((await getMarketPrice(networkID, provider)) / Math.pow(10, 9)) * daiPrice;
+    const marketPrice = await getMarketPrice(networkID, provider);
 
     const totalSupply = (await uccContract.totalSupply()) / Math.pow(10, 9);
+    const salesContractUccBalance = await uccContract.balanceOf(POLYGON_MAINNET.UCC_SALES_ADDRESS);
+    const formattedSalesContractUccBalance = ethers.utils.formatUnits(salesContractUccBalance, "gwei");
+    const numUCCSold = 10000000 - Number(formattedSalesContractUccBalance);
+    const initialCirculatingSupply = 770536;
 
-    const circSupply = (await sCalmContract.circulatingSupply()) / Math.pow(10, 9);
+    const circSupply = numUCCSold + initialCirculatingSupply;
 
     const stakingTVL = circSupply * marketPrice;
-    const marketCap = totalSupply * marketPrice;
+    const marketCap = (initialCirculatingSupply + numUCCSold) * marketPrice;
 
     const tokenBalPromises = allBonds.map(bond => bond.getTreasuryBalance(networkID, provider));
     const tokenBalances = await Promise.all(tokenBalPromises);
@@ -128,7 +132,7 @@ export const buyUCC = createAsyncThunk("preSale/buyUCC", async ({ action, value,
   const addresses = getAddresses(networkID);
   const signer = provider.getSigner();
 
-  const uccPreSaleContract = new ethers.Contract(addresses.UCC_SALES_ADDRESS, preUCCTokenSalesContract, signer);
+  const uccPreSaleContract = new ethers.Contract(addresses.UCC_SALES_ADDRESS, flatUCCTokenSalesContract, signer);
 
   let buyTx;
 
@@ -140,9 +144,10 @@ export const buyUCC = createAsyncThunk("preSale/buyUCC", async ({ action, value,
 
       const pCalmPrice = await uccPreSaleContract.UCCPrice();
       const priceToPay = Number(valueInWei) * Number(pCalmPrice / Math.pow(10, 9));
-      console.log("Price to pay", priceToPay);
 
-      buyTx = await uccPreSaleContract.buyUCC(priceToPay.toString(), { gasPrice });
+      const finalPriceToPay = Math.round(priceToPay);
+
+      buyTx = await uccPreSaleContract.buyUCC(finalPriceToPay.toString(), { gasPrice });
     } else {
       // stakeTx = await staking.unstake(ethers.utils.parseUnits(value, "gwei"), true, { gasPrice });
     }
