@@ -32,7 +32,7 @@ function NavContent() {
     if (currentPath.indexOf("bonds") >= 0 && page === "bonds") {
       return true;
     }
-    if (currentPath.indexOf("pre-sale") >= 0 && page === "pre-sale") {
+    if (currentPath.indexOf("flat-sale") >= 0 && page === "flat-sale") {
       return true;
     }
     if (currentPath.indexOf("calculator") >= 0 && page === "calculator") {
@@ -53,13 +53,13 @@ function NavContent() {
           </div>
         </Link>
 
-        {/* {address && (
+        {address && (
           <div className="wallet-link">
-            <Link href={`https://cchain.explorer.avax.network/address/${address}`} target="_blank">
+            <Link href={`https://polygonscan.com/address/${address}`} target="_blank">
               <p>{shorten(address)}</p>
             </Link>
           </div>
-        )} */}
+        )}
       </div>
 
       <div className="dapp-menu-links">
@@ -79,80 +79,34 @@ function NavContent() {
             </div>
           </Link>
 
-          {/* <Link
-            component={NavLink}
-            to="/stake"
-            isActive={(match: any, location: any) => {
-              return checkPage(location, "stake");
-            }}
-            className={classnames("button-dapp-menu", { active: isActive })}
-            style={{ textDecoration: "none" }}
-          >
-            <div className="dapp-menu-item">
-              <img alt="" src={StakeIcon} />
-              <p>Stake CALM</p>
-            </div>
-          </Link> */}
-
-          {/* <Link
-            component={NavLink}
-            id="bond-nav"
-            to="/bonds"
-            isActive={(match: any, location: any) => {
-              return checkPage(location, "bonds");
-            }}
-            className={classnames("button-dapp-menu", { active: isActive })}
-          >
-            <div className="dapp-menu-item">
-              <img alt="" src={Hamburger} />
-              <p>Mint CALM</p>
-            </div>
-          </Link> */}
-
-          {/* <div className="bond-discounts">
-            <p>Minting discounts</p>
-            {bonds.map((bond, i) => (
-              <Link component={NavLink} to={bond.bondDiscount && Number(trim(bond.bondDiscount * 100, 2)) > 0 ? `/bonds/${bond.name}` : `/bonds`} key={i} className={"bond"}>
-                {!bond.bondDiscount ? (
-                  <Skeleton variant="text" width={"150px"} />
-                ) : (
-                  <p>
-                    {bond.displayName}
-                    {bond.bondDiscount && Number(trim(bond.bondDiscount * 100, 2)) > 0 ? (
-                      <span className="bond-pair-roi">{trim(bond.bondDiscount * 100, 2)}%</span>
-                    ) : (
-                      <span className="bond-pair-roi" style={{ color: "green", textDecoration: "line-through" }}>
-                        SOLD OUT!
-                      </span>
-                    )}
-                  </p>
-                )}
-              </Link>
-            ))}
-          </div> */}
-
-          {/* <Link
-            component={NavLink}
-            to="/pre-sale"
-            isActive={(match: any, location: any) => {
-              return checkPage(location, "pre-sale");
-            }}
-            className={classnames("button-dapp-menu", { active: isActive })}
-            style={{ textDecoration: "none" }}
-          >
-            <div className="dapp-menu-item">
-              <img alt="" src={StakeIcon} />
-              <p>PreSale</p>
-            </div>
-          </Link> */}
           <Link
-            href="https://quickswap.exchange/#/swap?inputCurrency=&outputCurrency=0x35C3c8096CDe3c13a565b68d17b9Bf1f9836B9eB"
+            component={NavLink}
+            to="/flat-sale"
+            isActive={(match: any, location: any) => {
+              return checkPage(location, "flat-sale");
+            }}
+            className={classnames("button-dapp-menu", { active: isActive })}
+            style={{ textDecoration: "none" }}
+          >
+            <div className="dapp-menu-item">
+              <img alt="" src={StakeIcon} />
+              <p>Buy UCC</p>
+            </div>
+          </Link>
+          <Link
+            href="https://app.uniswap.org/#/swap?chain=polygon&inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=0x35C3c8096CDe3c13a565b68d17b9Bf1f9836B9eB"
             target="_blank"
             className={classnames("button-dapp-menu", { active: isActive })}
           >
             <div className="dapp-menu-item">
               <img alt="" src={Arrows} />
-              <p>Buy on QuickSwap</p>
+              <p>Buy on Uniswap</p>
+            </div>
+          </Link>
+          <Link href="https://www.universalcoffee.xyz/assets/whitePaper.93a63cb7.pdf" target="_blank" className={classnames("button-dapp-menu", { active: isActive })}>
+            <div className="dapp-menu-item">
+              <img alt="" src={Hamburger} />
+              <p>White Paper</p>
             </div>
           </Link>
 
