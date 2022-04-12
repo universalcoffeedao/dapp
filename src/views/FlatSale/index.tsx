@@ -199,15 +199,15 @@ function FlatSale() {
 
                   <div className="stake-user-data">
                     <div className="data-row">
-                      <p className="data-row-name">Your Balance</p>
+                      <p className="data-row-name">DAI You Will Spend</p>
+                      <p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{(Number(quantity) * Number(formattedUCCPrice)).toFixed(3)} DAI</>}</p>
+                    </div>
+                    <div className="data-row">
+                      <p className="data-row-name">Current UCC Balance</p>
                       <p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{trim(Number(yourUCCBalance), 4)} UCC</>}</p>
                     </div>
 
-                    {/* <div className="data-row">
-									<p className="data-row-name">Your Staked Balance</p>
-									<p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{trimmedsCalmBalance} SCALM</>}</p>
-								</div>
-
+                    {/* 
 								<div className="data-row">
 									<p className="data-row-name">Next Reward Amount</p>
 									<p className="data-row-value">{isAppLoading ? <Skeleton width="80px" /> : <>{nextRewardValue} SCALM</>}</p>
