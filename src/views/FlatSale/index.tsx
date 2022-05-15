@@ -85,10 +85,8 @@ function FlatSale() {
 
   const trimmedsDaiBalance = trim(Number(yourDaiBalance) / Math.pow(10, 9), 4);
 
-  const trimmedSalesProceedDaiBalance = trim(Number(salesProceedDaiBalance) / Math.pow(10, 9), 3);
   const formattedUCCPrice = new Intl.NumberFormat("en-US").format(Number(uccPrice) / Math.pow(10, 9));
   const numUCCSold = 10000000 - Number(salesContractUccBalance);
-  console.log("numUCCSold", numUCCSold);
 
   // 770,536 is a circulating supply before flat sale
   return (
@@ -101,7 +99,7 @@ function FlatSale() {
                 <p className="stake-card-header-title">UCC Sale (☕, ☕)</p>
               </div>
               <div className="stake-card-header">
-                {address ? (
+                {address && Number(salesContractUccBalance) != 0 ? (
                   <p className="stake-card-header-subtitle"> {(770536 + numUCCSold).toLocaleString()} / 2,000,000 Sold!</p>
                 ) : (
                   <p className="stake-card-header-subtitle">Limited Supply</p>
