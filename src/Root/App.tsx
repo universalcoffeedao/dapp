@@ -120,23 +120,8 @@ function App() {
           <Stake />
         </Route>
 
-        <Route path="/bonds">
-          {bonds.map(bond => {
-            return (
-              <Route exact key={bond.name} path={`/bonds/${bond.name}`}>
-                <Bond bond={bond} />
-              </Route>
-            );
-          })}
-          <ChooseBond />
-        </Route>
-
         <Route path="/flat-sale">
           <FlatSale />
-        </Route>
-
-        <Route path="/calculator">
-          <Calculator />
         </Route>
 
         <Route component={NotFound} />
