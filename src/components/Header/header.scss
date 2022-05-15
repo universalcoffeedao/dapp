@@ -4,6 +4,10 @@
   align-items: center;
   margin: auto;
 
+  @media screen and (max-width: 599px) {
+    margin-top: 1.3rem;
+  }
+
   .dapp-topbar-slider-btn {
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0px 0px 10px rgba(44, 39, 109, 0.1);
@@ -14,6 +18,10 @@
     justify-content: center;
     cursor: pointer;
     margin-right: 10px;
+
+    @media screen and (max-width: 599px) {
+      background: #ffa74f;
+    }
   }
 
   .dapp-topbar-btns-wrap {

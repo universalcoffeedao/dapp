@@ -8,6 +8,8 @@ import WrapButton from "./wrap-button";
 import "./header.scss";
 import { DRAWER_WIDTH, TRANSITION_DURATION } from "../../constants/style";
 
+import Menu from "../../assets/icons/menu.svg";
+
 interface IHeader {
   handleDrawerToggle: () => void;
   drawe: boolean;
@@ -52,10 +54,18 @@ function Header({ handleDrawerToggle, drawe }: IHeader) {
         <Toolbar disableGutters className="dapp-topbar">
           <div onClick={handleDrawerToggle} className="dapp-topbar-slider-btn">
             <div style={{ display: "flex", alignItems: "center" }}>
-              <img alt="" src={MenuIcon} style={{ width: "30px", height: "30px" }} />
-              <Typography variant="subtitle1" color="primary" style={{ color: "#ffa74f", fontSize: "18px", fontWeight: "bold", marginLeft: "5px", textDecoration: "none" }}>
-                UniversalCoffeeDAO
-              </Typography>
+              {drawe ? (
+                <>
+                  <img alt="" src={MenuIcon} style={{ width: "30px", height: "30px" }} />
+                  <Typography variant="subtitle1" color="primary" style={{ color: "#ffa74f", fontSize: "18px", fontWeight: "bold", marginLeft: "5px", textDecoration: "none" }}>
+                    UniversalCoffeeDAO
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <img alt="" src={Menu} />
+                </>
+              )}
             </div>{" "}
           </div>
           <div className="dapp-topbar-btns-wrap">

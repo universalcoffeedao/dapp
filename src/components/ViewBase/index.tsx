@@ -6,7 +6,6 @@ import SunRise from "../../assets/backgrounds/sunrise.png";
 import { DRAWER_WIDTH, TRANSITION_DURATION } from "../../constants/style";
 import MobileDrawer from "../Drawer/mobile-drawer";
 import Drawer from "../Drawer";
-import { cubesImage } from "src/constants/img";
 import Messages from "../Messages";
 
 interface IViewBaseProps {
