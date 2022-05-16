@@ -10,8 +10,6 @@ function Dashboard() {
   const isAppLoading = useSelector<IReduxState, boolean>(state => state.app.loading);
   const app = useSelector<IReduxState, IAppSlice>(state => state.app);
 
-  const trimmedStakingAPY = trim(app.stakingAPY * 100, 1);
-
   const yourUCCBalance = useSelector<IReduxState, string>(state => {
     return state.account.balances && state.account.balances.ucc;
   });

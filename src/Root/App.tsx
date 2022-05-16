@@ -13,6 +13,7 @@ import { Stake, ChooseBond, Bond, Dashboard, NotFound, Calculator } from "../vie
 import "./style.scss";
 import useTokens from "../hooks/tokens";
 import FlatSale from "src/views/FlatSale";
+import Giveout from "src/views/Giveout";
 
 function App() {
   const dispatch = useDispatch();
@@ -116,12 +117,12 @@ function App() {
           <Redirect to="/dashboard" />
         </Route>
 
-        <Route path="/stake">
-          <Stake />
-        </Route>
-
         <Route path="/flat-sale">
           <FlatSale />
+        </Route>
+
+        <Route exact path="/give-out">
+          <Giveout />
         </Route>
 
         <Route component={NotFound} />
