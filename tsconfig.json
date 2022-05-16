@@ -5,7 +5,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "lib": ["ESNext", "dom"],
-    "module": "ESNext",
+    "module": "ESNEXT",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true,
@@ -17,9 +17,15 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+    "esm": true
   },
   "include": ["./index.d.ts", "src", "babel.config.js"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx", "node_modules", "vendor", "public"],

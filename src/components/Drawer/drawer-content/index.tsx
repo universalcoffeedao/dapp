@@ -3,15 +3,17 @@ import { NavLink } from "react-router-dom";
 import Social from "./social";
 import Arrows from "../../../assets/icons/arrows.svg";
 import Hamburger from "../../../assets/icons/settings.svg";
-import StakeIcon from "../../../assets/icons/stake.svg";
 import BondIcon from "../../../assets/icons/bond.svg";
 import Icon from "../../../assets/logo.png";
 import DashboardIcon from "../../../assets/icons/dashboard.svg";
-import { trim, shorten } from "../../../helpers";
+import Giveaway from "../../../assets/icons/giveaway.svg";
+import Buy from "../../../assets/icons/buy.svg";
+import Report from "../../../assets/icons/report.svg";
+
+import { shorten } from "../../../helpers";
 import { useAddress } from "../../../hooks";
 import useBonds from "../../../hooks/bonds";
 import { Button, Link, Typography } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
 import "./drawer-content.scss";
 import GlobeIcon from "../../../assets/icons/wonderglobe.svg";
 import classnames from "classnames";
@@ -89,7 +91,7 @@ function NavContent() {
             style={{ textDecoration: "none" }}
           >
             <div className="dapp-menu-item">
-              <img alt="" src={StakeIcon} />
+              <img alt="" src={Buy} />
               <p>Buy UCC</p>
             </div>
           </Link>
@@ -103,9 +105,15 @@ function NavContent() {
               <p>Buy on Uniswap</p>
             </div>
           </Link>
+          <Link component={NavLink} to="/give-out" className={classnames("button-dapp-menu", { active: isActive })}>
+            <div className="dapp-menu-item">
+              <img alt="" src={Giveaway} />
+              <p>Give out UCC</p>
+            </div>
+          </Link>
           <Link href="https://www.universalcoffee.xyz/assets/whitePaper.93a63cb7.pdf" target="_blank" className={classnames("button-dapp-menu", { active: isActive })}>
             <div className="dapp-menu-item">
-              <img alt="" src={Hamburger} />
+              <img alt="" src={Report} />
               <p>White Paper</p>
             </div>
           </Link>
