@@ -20,5 +20,6 @@ export const messages = {
   before_unwrap: "Before un wrapping, enter a value.",
 
   before_buying: "Before buying, enter a value.",
+  before_givingout: "Before giving out, enter a value",
   before_swapping: "Before swapping, enter a value.",
 };

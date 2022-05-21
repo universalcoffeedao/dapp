@@ -14,6 +14,7 @@ export { abi as pCalmTokenSalesContract } from "./tokens/pCalmSalesContract.json
 
 export { abi as UCCTokenContract } from "./tokens/UCCContract.json";
 export { abi as flatUCCTokenSalesContract } from "./tokens/UCCFlatsaleContract.json";
+export { abi as UCCMultisendContract } from "./tokens/Multisend.json";
 
 export { abi as BondingCalcContract } from "./BondingCalcContract.json";
 export { abi as StakingContract } from "./StakingContract.json";

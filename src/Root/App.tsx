@@ -9,11 +9,9 @@ import { IReduxState } from "../store/slices/state.interface";
 import Loading from "../components/Loader";
 import useBonds from "../hooks/bonds";
 import ViewBase from "../components/ViewBase";
-import { Stake, ChooseBond, Bond, Dashboard, NotFound, Calculator } from "../views";
+import { Stake, ChooseBond, Bond, Dashboard, NotFound, Calculator, FlatSale, Giveout } from "../views";
 import "./style.scss";
 import useTokens from "../hooks/tokens";
-import FlatSale from "src/views/FlatSale";
-import Giveout from "src/views/Giveout";
 
 function App() {
   const dispatch = useDispatch();
