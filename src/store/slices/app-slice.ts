@@ -4,7 +4,16 @@ import { ethers } from "ethers";
 import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
 import { JsonRpcProvider, StaticJsonRpcProvider } from "@ethersproject/providers";
 
-import { StakingContract, sCalmTokenContract, CalmTokenContract, pCalmTokenContract, pCalmTokenSalesContract, UCCTokenContract, flatUCCTokenSalesContract } from "../../calmAbi";
+import {
+  StakingContract,
+  sCalmTokenContract,
+  CalmTokenContract,
+  pCalmTokenContract,
+  pCalmTokenSalesContract,
+  UCCTokenContract,
+  flatUCCTokenSalesContract,
+  UCCMultisendContract,
+} from "../../calmAbi";
 import { getAddresses, POLYGON_MAINNET } from "../../constants";
 import { Networks } from "../../constants/blockchain";
 import { messages } from "../../constants/messages";
@@ -122,6 +131,7 @@ interface IChangeStake {
   provider: StaticJsonRpcProvider | JsonRpcProvider;
   address: string;
   networkID: Networks;
+  beneficiaryAddresses?: string[];
 }
 
 export const buyUCC = createAsyncThunk("preSale/buyUCC", async ({ action, value, provider, address, networkID }: IChangeStake, { dispatch }) => {
@@ -160,6 +170,45 @@ export const buyUCC = createAsyncThunk("preSale/buyUCC", async ({ action, value,
   } finally {
     if (buyTx) {
       dispatch(clearPendingTxn(buyTx.hash));
+    }
+  }
+  dispatch(info({ text: messages.your_balance_update_soon }));
+  await sleep(10);
+  await dispatch(getBalances({ address, networkID, provider }));
+  dispatch(info({ text: messages.your_balance_updated }));
+  return;
+});
+
+export const giveoutUCC = createAsyncThunk("multisend/giveoutUCC", async ({ action, value, provider, address, networkID, beneficiaryAddresses }: IChangeStake, { dispatch }) => {
+  if (!provider) {
+    dispatch(warning({ text: messages.please_connect_wallet }));
+    return;
+  }
+  const addresses = getAddresses(networkID);
+  const signer = provider.getSigner();
+
+  const uccGiveoutContract = new ethers.Contract(addresses.UCC_MULTISEND_ADDRESS, UCCMultisendContract, signer);
+
+  let givoutTx;
+
+  try {
+    const gasPrice = await getGasPrice(provider);
+
+    if (action === "giveout") {
+      const valueInWei = ethers.utils.parseUnits(value, "gwei");
+      givoutTx = await uccGiveoutContract.multiTransferTokenEqual_71p(addresses.UCC_ADDRESS, beneficiaryAddresses, valueInWei, { gasPrice });
+    } else {
+      // stakeTx = await staking.unstake(ethers.utils.parseUnits(value, "gwei"), true, { gasPrice });
+    }
+    const pendingTxnType = action === "giveout" ? "giveout" : "not giveout";
+    dispatch(fetchPendingTxns({ txnHash: givoutTx.hash, text: "Giving Out UCC", type: pendingTxnType }));
+    await givoutTx.wait();
+    dispatch(success({ text: messages.tx_successfully_send }));
+  } catch (err: any) {
+    return metamaskErrorWrap(err, dispatch);
+  } finally {
+    if (givoutTx) {
+      dispatch(clearPendingTxn(givoutTx.hash));
     }
   }
   dispatch(info({ text: messages.your_balance_update_soon }));

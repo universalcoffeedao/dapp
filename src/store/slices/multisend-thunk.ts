@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { getAddresses } from "../../constants";
-import { CalmTokenContract, sCalmTokenContract, UCCMultisendContract, StableReserveContract } from "../../calmAbi";
+import { CalmTokenContract, sCalmTokenContract, UCCMultisendContract, StableReserveContract, UCCTokenContract } from "../../calmAbi";
 import { clearPendingTxn, fetchPendingTxns } from "./pending-txns-slice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchAccountSuccess, getBalances } from "./account-slice";
@@ -19,7 +19,7 @@ interface IChangeApproval {
   networkID: Networks;
 }
 
-export const changeApproval = createAsyncThunk("presale/changeApproval", async ({ token, provider, address, networkID }: IChangeApproval, { dispatch }) => {
+export const changeApproval = createAsyncThunk("multisend/changeApproval", async ({ token, provider, address, networkID }: IChangeApproval, { dispatch }) => {
   if (!provider) {
     dispatch(warning({ text: messages.please_connect_wallet }));
     return;
@@ -27,21 +27,20 @@ export const changeApproval = createAsyncThunk("presale/changeApproval", async (
   const addresses = getAddresses(networkID);
 
   const signer = provider.getSigner();
-  const calmContract = new ethers.Contract(addresses.CALM_ADDRESS, CalmTokenContract, signer);
-  const sCalmContract = new ethers.Contract(addresses.SCALM_ADDRESS, sCalmTokenContract, signer);
-  const daiContract = new ethers.Contract(addresses.MATIC_DAI_ADDRESS, StableReserveContract, signer);
 
+  const uccContract = new ethers.Contract(addresses.UCC_ADDRESS, UCCTokenContract, signer);
+
+  console.log(uccContract);
   let approveTx;
+
   try {
     const gasPrice = await getGasPrice(provider);
 
     if (token === "ucc") {
-      approveTx = await daiContract.approve(addresses.UCC_SALES_ADDRESS, ethers.constants.MaxUint256, { gasPrice });
+      approveTx = await uccContract.approve(addresses.UCC_MULTISEND_ADDRESS, ethers.constants.MaxUint256, { gasPrice });
     }
-
-    const text = "Approve " + (token === "ucc" && "PreSale");
-    const pendingTxnType = token === "ucc" ? "approve_staking" : "approve_unstaking";
-
+    const text = "Approve " + (token === "ucc" && "Giving Out");
+    const pendingTxnType = token === "ucc" ? "approve_givingout" : "approve_unstaking";
     dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text, type: pendingTxnType }));
     await approveTx.wait();
     dispatch(success({ text: messages.tx_successfully_send_approve }));
@@ -55,15 +54,12 @@ export const changeApproval = createAsyncThunk("presale/changeApproval", async (
 
   await sleep(2);
 
-  const stakeAllowance = await calmContract.allowance(address, addresses.STAKING_HELPER_ADDRESS);
-  const unstakeAllowance = await sCalmContract.allowance(address, addresses.STAKING_ADDRESS);
-
-  const uccAllowance = await daiContract.allowance(address, addresses.UCC_SALES_ADDRESS);
-
+  const multisendUccAllowance = await uccContract.allowance(address, addresses.UCC_MULTISEND_ADDRESS);
+  console.log("allowance", multisendUccAllowance);
   return dispatch(
     fetchAccountSuccess({
-      UCC: {
-        ucc: Number(uccAllowance),
+      multisend: {
+        ucc: Number(multisendUccAllowance),
       },
     }),
   );

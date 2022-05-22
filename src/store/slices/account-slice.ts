@@ -71,6 +71,9 @@ interface IUserAccountDetails {
     salesContractUcc: string;
     salesProceedDai: string;
   };
+  multisend: {
+    ucc: number;
+  };
   staking: {
     calm: number;
     scalm: number;
@@ -104,6 +107,7 @@ export const loadAccountDetails = createAsyncThunk("account/loadAccountDetails",
   let uccBalance = 0;
   let salesProceedDaiBalance = 0;
   let salesContractUccBalance = 0;
+  let multisendUccAllowance = 0;
 
   const addresses = getAddresses(networkID);
 
@@ -150,6 +154,7 @@ export const loadAccountDetails = createAsyncThunk("account/loadAccountDetails",
 
     salesContractUccBalance = await uccContract.balanceOf(POLYGON_MAINNET.UCC_SALES_ADDRESS);
     uccBalance = await uccContract.balanceOf(address);
+    multisendUccAllowance = await uccContract.allowance(address, addresses.UCC_MULTISEND_ADDRESS);
   }
 
   return {
@@ -166,6 +171,9 @@ export const loadAccountDetails = createAsyncThunk("account/loadAccountDetails",
     staking: {
       calm: Number(stakeAllowance),
       scalm: Number(unstakeAllowance),
+    },
+    multisend: {
+      ucc: Number(multisendUccAllowance),
     },
     wrapping: {
       scalm: Number(scalmWscalmAllowance),
@@ -319,6 +327,9 @@ export interface IAccountSlice {
     salesContractUcc: string;
     salesProceedDai: string;
   };
+  multisend: {
+    ucc: number;
+  };
   loading: boolean;
   staking: {
     calm: number;
@@ -340,6 +351,7 @@ const initialState: IAccountSlice = {
   loading: true,
   bonds: {},
   balances: { scalm: "", calm: "", wscalm: "", dai: "", pcalm: "", ucc: "", salesContractUcc: "", salesProceedDai: "" },
+  multisend: { ucc: 0 },
   staking: { calm: 0, scalm: 0 },
   wrapping: { scalm: 0 },
   tokens: {},

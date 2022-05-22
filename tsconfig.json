@@ -17,9 +17,10 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false
   },
   "ts-node": {
     "compilerOptions": {
