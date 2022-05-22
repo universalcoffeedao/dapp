@@ -286,7 +286,7 @@ function Giveout() {
                                 if (isPendingTxn(pendingTransactions, "approve_givingout")) return;
                                 onSeekApproval("ucc");
                               }}
-                              style={{ backgroundColor: isPendingTxn(pendingTransactions, "giveout") ? "#007500" : "rgba(255, 255, 255, 0.2)" }}
+                              style={{ backgroundColor: isPendingTxn(pendingTransactions, "approve_givingout") ? "#007500" : "rgba(255, 255, 255, 0.2)" }}
                             >
                               <p>{txnButtonText(pendingTransactions, "approve_givingout", "Approve")}</p>
                             </div>
