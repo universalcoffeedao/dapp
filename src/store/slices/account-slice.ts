@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { getAddresses } from "../../constants";
-import { CalmTokenContract, pCalmTokenContract, sCalmTokenContract, StableReserveContract, UCCTokenContract, wsCalmContract } from "../../calmAbi/";
+import { CalmTokenContract, flatUCCTokenSalesContract, pCalmTokenContract, sCalmTokenContract, StableReserveContract, UCCTokenContract, wsCalmContract } from "../../calmAbi/";
 import { setAll } from "../../helpers";
 
 import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
@@ -19,6 +19,8 @@ interface IGetBalances {
   provider: StaticJsonRpcProvider | JsonRpcProvider;
 }
 
+interface IGetAllowances extends IGetBalances {}
+
 interface IAccountBalances {
   balances: {
     scalm: string;
@@ -26,6 +28,17 @@ interface IAccountBalances {
     wscalm: string;
     dai: string;
     salesProceedDai: string;
+    ucc: string;
+    salesContractUcc: string;
+  };
+}
+
+interface IAccountAllowances {
+  ucc: {
+    dai: string;
+  };
+  multisend: {
+    ucc: string;
   };
 }
 
@@ -41,7 +54,11 @@ export const getBalances = createAsyncThunk("account/getBalances", async ({ addr
   const daiContract = new ethers.Contract(addresses.MATIC_DAI_ADDRESS, StableReserveContract, provider);
   const daiBalance = await daiContract.balanceOf(address);
 
+  const uccContract = new ethers.Contract(addresses.UCC_ADDRESS, UCCTokenContract, provider);
+  const myUccBalance = await uccContract.balanceOf(address);
   const salesProceedDaiBalance = await daiContract.balanceOf("0x24270C9f39dDfDFBB6B137D969E1770c7F9fbD03");
+
+  const uccSalesContractBalance = await uccContract.balanceOf(addresses.UCC_SALES_ADDRESS);
 
   return {
     balances: {
@@ -50,6 +67,27 @@ export const getBalances = createAsyncThunk("account/getBalances", async ({ addr
       wscalm: ethers.utils.formatEther(wsCALMBalance),
       dai: ethers.utils.formatUnits(daiBalance, "gwei"),
       salesProceedDai: ethers.utils.formatUnits(salesProceedDaiBalance, "gwei"),
+      ucc: ethers.utils.formatUnits(myUccBalance, "gwei"),
+      salesContractUcc: ethers.utils.formatUnits(uccSalesContractBalance, "gwei"),
+    },
+  };
+});
+
+export const getAllowances = createAsyncThunk("account/getAllowances", async ({ address, networkID, provider }: IGetAllowances): Promise<IAccountAllowances> => {
+  const addresses = getAddresses(networkID);
+
+  const daiContract = new ethers.Contract(addresses.MATIC_DAI_ADDRESS, wsCalmContract, provider);
+  const uccDaiAllowance = await daiContract.allowance(address, addresses.UCC_SALES_ADDRESS);
+
+  const uccContract = new ethers.Contract(addresses.UCC_ADDRESS, UCCTokenContract, provider);
+  const multisendUccAllowance = await uccContract.allowance(address, addresses.UCC_MULTISEND_ADDRESS);
+
+  return {
+    ucc: {
+      dai: ethers.utils.formatUnits(uccDaiAllowance, "gwei"),
+    },
+    multisend: {
+      ucc: ethers.utils.formatUnits(multisendUccAllowance, "gwei"),
     },
   };
 });
