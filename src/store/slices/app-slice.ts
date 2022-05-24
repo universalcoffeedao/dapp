@@ -163,8 +163,9 @@ export const buyUCC = createAsyncThunk("preSale/buyUCC", async ({ action, value,
     }
     const pendingTxnType = action === "buy" ? "buying" : "swapping";
     dispatch(fetchPendingTxns({ txnHash: buyTx.hash, text: getStakingTypeText(action), type: pendingTxnType }));
-    await buyTx.wait();
-    dispatch(success({ text: messages.tx_successfully_send }));
+    await buyTx.wait().then(() => {
+      dispatch(success({ text: messages.tx_successfully_send }));
+    });
   } catch (err: any) {
     return metamaskErrorWrap(err, dispatch);
   } finally {
@@ -174,7 +175,7 @@ export const buyUCC = createAsyncThunk("preSale/buyUCC", async ({ action, value,
   }
   dispatch(info({ text: messages.your_balance_update_soon }));
   await sleep(10);
-  await dispatch(getBalances({ address, networkID, provider }));
+  dispatch(getBalances({ address, networkID, provider }));
   dispatch(info({ text: messages.your_balance_updated }));
   return;
 });
@@ -202,8 +203,9 @@ export const giveoutUCC = createAsyncThunk("multisend/giveoutUCC", async ({ acti
     }
     const pendingTxnType = action === "giveout" ? "giveout" : "not giveout";
     dispatch(fetchPendingTxns({ txnHash: givoutTx.hash, text: "Giving Out UCC", type: pendingTxnType }));
-    await givoutTx.wait();
-    dispatch(success({ text: messages.tx_successfully_send }));
+    await givoutTx.wait().then(() => {
+      dispatch(success({ text: messages.tx_successfully_send }));
+    });
   } catch (err: any) {
     return metamaskErrorWrap(err, dispatch);
   } finally {
@@ -213,7 +215,7 @@ export const giveoutUCC = createAsyncThunk("multisend/giveoutUCC", async ({ acti
   }
   dispatch(info({ text: messages.your_balance_update_soon }));
   await sleep(10);
-  await dispatch(getBalances({ address, networkID, provider }));
+  dispatch(getBalances({ address, networkID, provider }));
   dispatch(info({ text: messages.your_balance_updated }));
   return;
 });

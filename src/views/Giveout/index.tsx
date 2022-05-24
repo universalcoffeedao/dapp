@@ -74,7 +74,10 @@ function Giveout() {
       dispatch(warning({ text: action === "giveout" ? messages.before_givingout : messages.before_swapping }));
     } else {
       await dispatch(giveoutUCC({ address, action, value: String(uccSpendForEachAddress), provider, networkID: chainID, beneficiaryAddresses: addressesList }));
+      setAddressesList([]);
+      setNumAddresses(0);
       setUccSpendForEachAddress("");
+      setErrorMessage("");
     }
   };
 

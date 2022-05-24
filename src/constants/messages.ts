@@ -8,8 +8,8 @@ export const messages = {
   before_stake: "Before staking, enter a value.",
   before_unstake: "Before un staking, enter a value.",
   tx_successfully_send: "Your transaction was successfully sent",
-  tx_successfully_send_approve: "Your transaction was successfully sent. Please refresh your browser in a few seconds :)",
-  your_balance_updated: "Done! Please refresh your browser in a few seconds :)",
+  tx_successfully_send_approve: "Your transaction was successfully sent. Please wait for a few seconds",
+  your_balance_updated: "Done! Thanks for waiting. You may need to refresh your browser :)",
   nothing_to_claim: "You have nothing to claim",
   something_wrong: "Something went wrong",
   switch_to_polygon: "Switch to the Polygon network?",
@@ -18,7 +18,6 @@ export const messages = {
   your_balance_update_soon: "Your balance will update soon",
   before_wrap: "Before wrapping, enter a value.",
   before_unwrap: "Before un wrapping, enter a value.",
-
   before_buying: "Before buying, enter a value.",
   before_givingout: "Before giving out, enter a value",
   before_swapping: "Before swapping, enter a value.",

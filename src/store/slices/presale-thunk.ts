@@ -3,7 +3,7 @@ import { getAddresses } from "../../constants";
 import { CalmTokenContract, sCalmTokenContract, UCCMultisendContract, StableReserveContract } from "../../calmAbi";
 import { clearPendingTxn, fetchPendingTxns } from "./pending-txns-slice";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchAccountSuccess, getBalances } from "./account-slice";
+import { fetchAccountSuccess, getAllowances, getBalances } from "./account-slice";
 import { JsonRpcProvider, StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Networks } from "../../constants/blockchain";
 import { warning, success, info, error } from "../../store/slices/messages-slice";
@@ -43,8 +43,9 @@ export const changeApproval = createAsyncThunk("presale/changeApproval", async (
     const pendingTxnType = token === "ucc" ? "approve_staking" : "approve_unstaking";
 
     dispatch(fetchPendingTxns({ txnHash: approveTx.hash, text, type: pendingTxnType }));
-    await approveTx.wait();
-    dispatch(success({ text: messages.tx_successfully_send_approve }));
+    await approveTx.wait().then(() => {
+      dispatch(success({ text: messages.tx_successfully_send_approve }));
+    });
   } catch (err: any) {
     return metamaskErrorWrap(err, dispatch);
   } finally {
@@ -53,18 +54,19 @@ export const changeApproval = createAsyncThunk("presale/changeApproval", async (
     }
   }
 
-  await sleep(2);
-
-  const stakeAllowance = await calmContract.allowance(address, addresses.STAKING_HELPER_ADDRESS);
-  const unstakeAllowance = await sCalmContract.allowance(address, addresses.STAKING_ADDRESS);
+  await sleep(10);
 
   const uccAllowance = await daiContract.allowance(address, addresses.UCC_SALES_ADDRESS);
 
-  return dispatch(
+  dispatch(
     fetchAccountSuccess({
-      UCC: {
-        ucc: Number(uccAllowance),
+      ucc: {
+        dai: Number(uccAllowance),
       },
     }),
   );
+  dispatch(getAllowances({ address, networkID, provider }));
+  dispatch(info({ text: messages.your_balance_updated }));
+
+  return;
 });
